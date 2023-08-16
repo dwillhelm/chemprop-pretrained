@@ -15,7 +15,7 @@ CHEMPROP_PARAMS = dict(
         dataset_type='regression',
         save_dir=str(LOG_DIR),
         smiles_column="smiles_relaxed",
-        target_columns="gap",
+        # target_columns="gap homo lumo",
         num_epoch=str(1),
 )
 
@@ -38,7 +38,7 @@ def extract_chemprop_csv(
     # TODO: Create train/val/test splits here. Just return a single df for now.
     if Path(savepath).exists() is False or force is True: 
         _df = df.copy()
-        _df.reindex(columns=columns)
+        _df = _df.reindex(columns=columns)
         _df.to_csv(savepath)
     else:
         _df = pd.read_csv(savepath, index_col=0)
@@ -49,13 +49,13 @@ def train_chemprop(
         dataset_type:str, 
         save_dir:str,
         smiles_column:str, 
-        target_columns:str,
+        # target_columns:str,
         cache_cutoff=10000,
         num_workers=8,
         num_epoch=30,
     ):
     
-    subprocess.call([
+    cmd = [
         "chemprop_train",
         "--data_path",
         f"{data_path}",
@@ -66,14 +66,18 @@ def train_chemprop(
         "--smiles_column", 
         f"{smiles_column}",
         "--target_columns", 
-        f"{target_columns}",
+        "gap",
+        "homo", 
+        "lumo",
         "--cache_cutoff", 
         f"{cache_cutoff}",
         "--num_workers",
         f"{num_workers}",
         "--epochs",
         f"{num_epoch}",
-    ])
+    ]
+    print('\n\n', cmd, '\n')
+    subprocess.check_call(cmd)
 
 
 
@@ -86,7 +90,7 @@ def main():
     dataset = utils.get_qm9_dataset(force=False, rm_xyz=True)
     dataset = extract_chemprop_csv(
         dataset,
-        columns=['smiles_relaxed', 'gap'], 
+        columns=['smiles_relaxed', 'gap', 'homo', 'lumo'], 
         savepath=DATASET_PATH,
         force=False,
     )
