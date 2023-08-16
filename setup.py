@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 PACKAGE_NAME = "chemprop_pretrained"
-PACKAGE_DIRS = ["src"]
+PACKAGE_DIRS = ["chemprop_pretrained"]
 VERSION = "0.0.0"
 RUNTIME_DEPS = None
 
