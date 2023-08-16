@@ -65,9 +65,9 @@ def bootstrap(ci_mode, force=False):
         cmd = ["edm", "run", "-e", ENV_NAME, "--", "pip", "install"] + PIP_DEPS
         subprocess.run(cmd, check=True)
 
-        # # install local project code
-        # cmd = ["edm", "run", "-e", ENV_NAME, "--", "pip", "install", "-e", "."]
-        # subprocess.run(cmd, check=True)
+        # install local project code
+        cmd = ["edm", "run", "-e", ENV_NAME, "--", "pip", "install", "-e", "."]
+        subprocess.run(cmd, check=True)
 
         print("Bootstrap complete.")
 
